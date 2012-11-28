@@ -1,0 +1,13 @@
+BACKLOG
+ * Write buffer to file when full
+ * munlock?
+ * Put code in functions
+ * Fork the worker
+ * mlock in new process
+ * Better scheduling
+ * Take settings as arguments
+ * Makefile
+ * Init-scripts
+ * Env. config file
+ * Shell logger
+ * PHP extension
