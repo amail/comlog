@@ -1,8 +1,11 @@
 BACKLOG
+ * Look up kmalloc
+ * Check impl. of ring buffer
  * Write buffer to file when full
  * munlock?
  * Put code in functions
  * Fork the worker
+ * Put code in different files
  * mlock in new process
  * Better scheduling
  * Take settings as arguments
