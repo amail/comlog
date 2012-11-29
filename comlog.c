@@ -15,6 +15,7 @@
 #define MSG_SIZE 256
 #define DEFAULT_BLOCK_SIZE 4096
 #define DUMP_FILE "/tmp/comlog.dump"
+#define MQ_NAME "/mq-comlog01"
 
 unsigned long int get_block_size(char*);
 void sig_quit(int);
@@ -33,7 +34,7 @@ int main(void)
 {
 	int len, res;
 	struct mq_attr attr;
-	const char *MQ_NAME = "/mq-comlog01";
+	char devfile[] = "/tmp/comlog-shm-XXXXXX";
 
 	printf("opening dump file...\n");
 	/* open dump file */
@@ -79,8 +80,6 @@ int main(void)
 	}*/
 
 	/* mmap */
-	char devfile[] = "/tmp/comlog-shm-XXXXXX";
-	void *address;
 	fd = mkstemp(devfile);
 	if (fd < 0) {
 		perror("mkstemp");

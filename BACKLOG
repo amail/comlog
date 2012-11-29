@@ -1,8 +1,10 @@
 BACKLOG
- * Look up kmalloc
+ * API spec
+ * Manpage
+ * Look up kmalloc, syslogstd and makedev()
  * Check impl. of ring buffer
  * Write buffer to file when full
- * munlock?
+ * munlock before msync?
  * Put code in functions
  * Fork the worker
  * Put code in different files
@@ -13,4 +15,5 @@ BACKLOG
  * Init-scripts
  * Env. config file
  * Shell logger
+ * Lib?
  * PHP extension
