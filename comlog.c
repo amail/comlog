@@ -26,7 +26,7 @@ typedef struct {
 } ring_buffer;
 
 ring_buffer buffer;
-int dump_fd, fd;
+int dump_fd, mmap_fd;
 int block_size, q_mult, max_msgs, num_msgs;
 mqd_t mqdes;
 
@@ -80,24 +80,24 @@ int main(void)
 	}*/
 
 	/* mmap */
-	fd = mkstemp(devfile);
-	if (fd < 0) {
+	mmap_fd = mkstemp(devfile);
+	if (mmap_fd < 0) {
 		perror("mkstemp");
 	}
 	printf("using shm file %s\n", devfile);
 	if (unlink(devfile) < 0) {
 		perror("unlink");
 	}
-	if (ftruncate(fd, buffer.size) < 0) {
+	if (ftruncate(mmap_fd, buffer.size) < 0) {
 		perror("ftruncate");
 	}
-	fd = fopen(DUMP_FILE, "rw");
-	buffer.address = mmap(NULL, buffer.size, PROT_WRITE, MAP_FIXED | MAP_SHARED, fd, 0);
+	//dump_fd_rw = fopen(DUMP_FILE, "rw");
+	buffer.address = mmap(NULL, buffer.size, PROT_WRITE, MAP_FIXED | MAP_SHARED, mmap_fd, 0);
 	if (buffer.address < 0) {
 		perror("mmap");
 		exit(1);
 	}
-	close(fd);
+	close(mmap_fd);
 
 	/* madvise */
 	if (0 < madvise(buffer.address, buffer.size, MADV_SEQUENTIAL)) {
@@ -125,7 +125,7 @@ int main(void)
 	buffer.tail = 0;
 	buffer.head = 0;
 
-	printf("using buffer size of %d bytes\n", buffer.size);
+	printf("using buffer size of %lu bytes\n", buffer.size);
 
 	num_msgs = 0;
 	max_msgs = buffer.size / MSG_SIZE;
@@ -145,7 +145,7 @@ int main(void)
 	while(1) {
 		len = 0;
 		while(len < MSG_SIZE) {
-			res = mq_receive(mqdes, buffer.head + len, MSG_SIZE - len, NULL);
+			res = mq_receive(mqdes, (char*)(buffer.head + len), (size_t)(MSG_SIZE - len), NULL);
 			if (res < 0) {
 				perror("mq_receive");
 				continue;
