@@ -3,10 +3,12 @@
 OBJS	= comlog.o
 
 CC	= gcc
-CFLAGS	= -Wl,--no-as-needed -g -fPIC -Wall -lrt
+CFLAGS	= -Wl,--no-as-needed -fPIC -Wall
+LDFLAGS	= -s
+LDLIBS	= -lrt
 
 comlog:		$(OBJS)
-		$(CC) $(CFLAGS) $(OBJS) -o comlog
+		$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $(OBJS) -o comlog
 
 comlog.o:	comlog.c
 		$(CC) $(CFLAGS) -c comlog.c -o comlog.o
